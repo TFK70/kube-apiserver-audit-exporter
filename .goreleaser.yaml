@@ -29,7 +29,7 @@ checksum:
 
 dockers:
   - image_templates:
-      - ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}
+      - ghcr.io/{{ .Env.REPO_OWNER_LOWER }}/{{ .ProjectName }}:{{ .Version }}
     dockerfile: Dockerfile
     use: buildx
     build_flag_templates:

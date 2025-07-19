@@ -32,5 +32,3 @@ dockers:
       - ghcr.io/{{ .Env.REPO_OWNER_LOWER }}/{{ .ProjectName }}:{{ .Version }}
     dockerfile: Dockerfile
     use: buildx
-    build_flag_templates:
-      - --platform=linux/amd64

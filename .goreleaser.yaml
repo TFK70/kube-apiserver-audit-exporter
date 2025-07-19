@@ -11,10 +11,11 @@ builds:
       - CGO_ENABLED=0
     goos:
       - linux
-      - windows
-      - darwin
     ldflags:
       - -X main.Version={{.Version}}
+    goarch:
+      - amd64
+      - arm64
 
 archives:
   - name_template: >-
@@ -29,6 +30,24 @@ checksum:
 
 dockers:
   - image_templates:
-      - ghcr.io/{{ .Env.REPO_OWNER_LOWER }}/{{ .ProjectName }}:{{ .Version }}
+      - ghcr.io/{{ .Env.REPO_OWNER_LOWER }}/{{ .ProjectName }}:{{ .Version }}-amd64
     dockerfile: Dockerfile
     use: buildx
+    build_flag_templates:
+    - --platform=linux/amd64
+  - image_templates:
+      - ghcr.io/{{ .Env.REPO_OWNER_LOWER }}/{{ .ProjectName }}:{{ .Version }}-arm64
+    goarch: arm64
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag_templates:
+    - --platform=linux/arm64
+docker_manifests:
+- name_template: ghcr.io/{{ .Env.REPO_OWNER_LOWER }}/{{ .ProjectName }}:{{ .Version }}
+  image_templates:
+  - ghcr.io/{{ .Env.REPO_OWNER_LOWER }}/{{ .ProjectName }}:{{ .Version }}-amd64
+  - ghcr.io/{{ .Env.REPO_OWNER_LOWER }}/{{ .ProjectName }}:{{ .Version }}-arm64
+- name_template: ghcr.io/{{ .Env.REPO_OWNER_LOWER }}/{{ .ProjectName }}:latest
+  image_templates:
+  - ghcr.io/{{ .Env.REPO_OWNER_LOWER }}/{{ .ProjectName }}:{{ .Version }}-amd64
+  - ghcr.io/{{ .Env.REPO_OWNER_LOWER }}/{{ .ProjectName }}:{{ .Version }}-arm64
